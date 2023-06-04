@@ -135,8 +135,13 @@ class MangaInfoScreenModel(
     /**
      * Helper function to update the UI state only if it's currently in success state
      */
-    private fun updateSuccessState(func: (MangaScreenState.Success) -> MangaScreenState.Success) {
-        mutableState.update { if (it is MangaScreenState.Success) func(it) else it }
+    private inline fun updateSuccessState(func: (MangaScreenState.Success) -> MangaScreenState.Success) {
+        mutableState.update {
+            when (it) {
+                MangaScreenState.Loading -> it
+                is MangaScreenState.Success -> func(it)
+            }
+        }
     }
 
     init {
